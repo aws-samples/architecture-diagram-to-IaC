@@ -1,0 +1,85 @@
+{
+    "AWSModules": [
+      {
+        "ModuleName": "vpc",
+        "ModuleSource": "https://github.com/terraform-aws-modules/terraform-aws-vpc",
+        "Description": "Creates VPC resources, providing a logically isolated section of the AWS cloud.",
+        "RequiredParameters": ["cidr", "name"],
+        "Dependencies": [],
+        "BestPractices": "Define multiple subnets to segregate resources, ensure proper route tables and network ACLs are in place."
+      },
+      {
+        "ModuleName": "subnet",
+        "ModuleSource": "https://github.com/terraform-aws-modules/terraform-aws-subnet",
+        "Description": "Provisions subnets within a specified VPC.",
+        "RequiredParameters": ["vpc_id", "cidr_block"],
+        "Dependencies": ["vpc"],
+        "BestPractices": "Use different subnets for different layers (e.g., public, private, database) for enhanced security."
+      },
+      {
+        "ModuleName": "autoscaling-group",
+        "ModuleSource": "https://github.com/terraform-aws-modules/terraform-aws-autoscaling",
+        "Description": "Manages autoscaling groups that automatically adjust the number of EC2 instances.",
+        "RequiredParameters": ["launch_configuration", "min_size", "max_size"],
+        "Dependencies": ["ec2-instance", "launch-template"],
+        "BestPractices": "Implement scaling policies based on specific metrics to optimize cost and performance."
+      },
+      {
+        "ModuleName": "application-load-balancer",
+        "ModuleSource": "https://github.com/terraform-aws-modules/terraform-aws-alb",
+        "Description": "Deploys an Application Load Balancer to distribute incoming traffic across multiple targets.",
+        "RequiredParameters": ["load_balancer_type", "subnets"],
+        "Dependencies": ["vpc", "subnet"],
+        "BestPractices": "Enable access logs, use SSL/TLS certificates for secure connections."
+      },
+      {
+        "ModuleName": "target-group",
+        "ModuleSource": "https://github.com/terraform-aws-modules/terraform-aws-target-group",
+        "Description": "Sets up target groups for routing requests to one or more registered targets.",
+        "RequiredParameters": ["vpc_id", "port", "protocol"],
+        "Dependencies": ["vpc"],
+        "BestPractices": "Use health checks to ensure traffic is routed to healthy instances."
+      },
+      {
+        "ModuleName": "launch-template",
+        "ModuleSource": "https://github.com/terraform-aws-modules/terraform-aws-launch-template",
+        "Description": "Configures launch templates for EC2 instances to provide launch parameters.",
+        "RequiredParameters": ["name", "image_id", "instance_type"],
+        "Dependencies": [],
+        "BestPractices": "Regularly update the AMI and review security group settings."
+      },
+      {
+        "ModuleName": "secrets-manager",
+        "ModuleSource": "https://github.com/terraform-aws-modules/terraform-aws-secrets-manager",
+        "Description": "Manages AWS Secrets Manager to protect secrets needed to access your applications, services, and IT resources.",
+        "RequiredParameters": ["name", "secret_string"],
+        "Dependencies": [],
+        "BestPractices": "Enable automatic rotation for secrets that are used frequently or are particularly sensitive."
+      },
+      {
+        "ModuleName": "s3-bucket",
+        "ModuleSource": "https://github.com/terraform-aws-modules/terraform-aws-s3-bucket",
+        "Description": "Creates S3 buckets for object storage to store and protect any amount of data.",
+        "RequiredParameters": ["bucket"],
+        "Dependencies": [],
+        "BestPractices": "Enable versioning and encryption, configure lifecycle policies appropriately."
+      },
+      {
+        "ModuleName": "ec2-instance",
+        "ModuleSource": "https://github.com/terraform-aws-modules/terraform-aws-ec2-instance",
+        "Description": "Provisions EC2 instances, allowing for customizable computing capacity.",
+        "RequiredParameters": ["instance_type", "ami"],
+        "Dependencies": ["vpc", "subnet"],
+        "BestPractices": "Use the latest AMI for enhanced security, configure monitoring, and scalability features."
+      },
+      {
+        "ModuleName": "rds-instance",
+        "ModuleSource": "https://github.com/terraform-aws-modules/terraform-aws-rds",
+        "Description": "Deploys RDS instances for managed relational database services with various DB engines.",
+        "RequiredParameters": ["instance_class", "engine", "username", "password"],
+        "Dependencies": ["vpc", "db-subnet-group"],
+        "BestPractices": "Encrypt database instances, ensure multi-AZ deployment for production workloads for high availability."
+      }
+    ]
+  }
+  

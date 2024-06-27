@@ -1,0 +1,76 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Bedrock Agent Lambda API",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/process-diagram": {
+            "post": {
+                "summary": "Architecture diagram analysis",
+                "description": "Architecture diagram analysis to create IaC",
+                "operationId": "DiagramAnalysis",
+                "tags": [
+                    "Diagram Analysis"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "diagramS3Bucket": {
+                                        "type": "string"
+				    },
+                                    "diagramS3Key": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": [
+                                    "diagramS3Bucket",
+                                    "diagramS3Key"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Analyzed the diagram",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error occurred",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        },
+                                        "details": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
