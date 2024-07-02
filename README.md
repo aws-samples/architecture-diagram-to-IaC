@@ -11,7 +11,7 @@ This README documents two AWS Lambda functions designed for creating IaC from ar
 - The Bedrock Agent displays the generated questions to the user and records their responses. After addressing all the questions, the agent provides a comprehensive summary of the analyzed infrastructure component configuration for user review. Users then have the opportunity to approve this configuration or suggest any necessary adjustments. Once the details are finalized, this information is passed to another action group, which activates an AWS Lambda function to proceed with the process.
 - The Lambda function processes the user's finalized inputs, utilizes a knowledge base with modules that adhere to company standards as a baseline, and generates the necessary Infrastructure as Code (IaC). Once generated, the IaC is automatically pushed to a designated GitHub repository.
 
-#### Analysis Query Generation Lambda
+#### Analysis Query Generation Lambda (Triggered by action groups)
 - **Description**: Analyses the input architecture diagram and generates questions for missing components/dependencies.
 - **Dependencies**: Python 3.x, Resource based policy (Principal: bedrock.amazonaws.com, Action: lambda:InvokeFunction)
 - **Logical Flow**:
@@ -21,7 +21,7 @@ This README documents two AWS Lambda functions designed for creating IaC from ar
   4. Creates a summary of the services present in diagram and also questions regarding missing components/dependencies.
   5. Returns the information back to Bedrock agent.
 
-#### IaC Generation and Deployment Lambda
+#### IaC Generation and Deployment Lambda (Triggered by action groups)
 - **Description**: Generates and commits Terraform configurations for AWS services to a GitHub repository.
 - **Environment Variables**:
   - `GITHUB_TOKEN`: Token for GitHub API authentication.
